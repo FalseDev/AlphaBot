@@ -1,5 +1,8 @@
 import { Telegraf } from "telegraf";
-import * as count from "./components/commands/count/main";
+
+import * as count from "./components/commandGroups/count/main";
+import joke from "./components/commands/joke";
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -11,6 +14,8 @@ bot.command("start", (context) => context.reply("Hoi"));
 bot.command("count", count.add);
 bot.command("cancelcount", count.remove);
 bot.command("countstatus", count.status);
+
+bot.command("joke", joke);
 
 console.log("Starting up!");
 bot.launch();
