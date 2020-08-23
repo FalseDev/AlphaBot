@@ -1,19 +1,22 @@
 import { TelegrafContext } from "telegraf/typings/context";
 
 export default class Counter {
-  public timer:NodeJS.Timeout
-  public killtimer:NodeJS.Timeout
-  public name:string
+  public timer: NodeJS.Timeout;
+  public killtimer: NodeJS.Timeout;
+  public name: string;
+  public getTime: () => string;
   constructor({
     time,
     interval,
     name,
     context,
+    autoRemove,
   }: {
     time: number;
     interval: number;
     name: string;
     context: TelegrafContext;
+    autoRemove: (name: string) => void;
   }) {
     const timer = setInterval(() => {
       time -= interval;
@@ -23,14 +26,16 @@ export default class Counter {
     const killtimer = setTimeout(() => {
       clearInterval(timer);
       context.reply(`Timer ${name} ended`);
+      autoRemove(name);
     }, time * 1000);
 
     context.telegram.sendMessage(
       context.chat!.id,
       `Timer: ${time}\nInterval: ${interval}\nName: ${name}\nStatus: Running`
     );
-    this.timer = timer
-    this.killtimer = killtimer
-    this.name = name
+    this.timer = timer;
+    this.killtimer = killtimer;
+    this.name = name;
+    this.getTime = () => `Timer ${name} at ${time}`;
   }
 }

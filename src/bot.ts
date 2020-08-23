@@ -9,7 +9,8 @@ bot.command("start", (context) => context.reply("Hoi"));
 
 // Counting
 bot.command("count", count.add);
-bot.command("cancelcount", count.remove)
+bot.command("cancelcount", count.remove);
+bot.command("countstatus", count.status);
 
 console.log("Starting up!");
 bot.launch();
