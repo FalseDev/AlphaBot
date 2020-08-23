@@ -1,6 +1,9 @@
 import { TelegrafContext } from "telegraf/typings/context";
 
-class Counter {
+export default class Counter {
+  public timer:NodeJS.Timeout
+  public killtimer:NodeJS.Timeout
+  public name:string
   constructor({
     time,
     interval,
@@ -26,23 +29,8 @@ class Counter {
       context.chat!.id,
       `Timer: ${time}\nInterval: ${interval}\nName: ${name}\nStatus: Running`
     );
-
-    return { timer, killtimer, name, time, interval };
+    this.timer = timer
+    this.killtimer = killtimer
+    this.name = name
   }
 }
-
-const count = async (context: TelegrafContext) => {
-  const comps = context.message!.text!.split(" ");
-
-  let time = 60;
-  let interval = 10;
-  let name = "Unnamed timer";
-
-  if (comps[1]) time = +comps[1];
-  if (comps[2]) interval = +comps[2];
-  if (comps[3]) name = comps[3];
-
-  const timer = new Counter({ time, interval, name, context });
-};
-
-export default count;
