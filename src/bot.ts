@@ -2,6 +2,7 @@ import { Telegraf } from "telegraf";
 
 import * as count from "./components/commandGroups/count/main";
 import joke from "./components/commands/joke";
+import urbanDictionaryMeaning from "./components/commands/urbanDictionary";
 
 import dotenv from "dotenv";
 import * as mathFact from "./components/commandGroups/numberFact/main";
@@ -24,6 +25,7 @@ bot.command("yearfact", mathFact.yearFact);
 bot.command("numbertrivia", mathFact.numberTriviaFact);
 
 bot.command("joke", joke);
+bot.command("udef", urbanDictionaryMeaning);
 
 console.log("Starting up!");
 bot.launch();
