@@ -36,9 +36,9 @@ export default class Counter {
 
     context.telegram.sendMessage(
       context.chat!.id,
-      `Timer: ${readable(
-        time
-      )}\nInterval: ${interval}\nName: ${name}\nStatus: Running`
+      `Timer: ${readable(time)}\nInterval: ${readable(
+        interval
+      )}\nName: ${name}\nStatus: Running`
     );
     this.timer = timer;
     this.killtimer = killtimer;

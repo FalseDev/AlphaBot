@@ -29,6 +29,9 @@ export const add = async (context: TelegrafContext) => {
 export const remove = (context: TelegrafContext) => {
   const name = context.message?.text!.slice(13);
   const targetIndex = timers.findIndex((timer) => name === timer.name);
+  if (targetIndex === -1) {
+    return context.reply(`No timer with name ${name}`);
+  }
   const target = timers.splice(targetIndex, 1)[0];
   clearTimeout(target?.killtimer!);
   clearInterval(target?.timer!);
