@@ -1,11 +1,16 @@
 function stringToSeconds(time: string) {
   try {
-    const h = time.split("h");
-    const hrs = +h[0];
-    const m = h[1].split("m");
-    const mins = +m[0];
-    const s = m[1].split("s");
-    const secs = +s[0];
+    let hrs = 0;
+    let mins = 0;
+
+    let comps = time.split(":");
+    const secs = +comps.splice(comps.length - 1);
+    if (comps) mins = +comps.splice(comps.length - 1);
+    if (comps) hrs = +comps.splice(comps.length - 1);
+
+    if (Number.isNaN(secs) || Number.isNaN(mins) || Number.isNaN(hrs))
+      return "Invalid input";
+
     const inSeconds = hrs * 3600 + mins * 60 + secs;
     if (inSeconds < 1) return "Invalid input";
     return inSeconds;

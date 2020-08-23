@@ -1,4 +1,9 @@
 import { TelegrafContext } from "telegraf/typings/context";
+import prettyMillisecond from "pretty-ms";
+
+function readable(seconds: number) {
+  return prettyMillisecond(seconds * 1000, { verbose: true });
+}
 
 export default class Counter {
   public timer: NodeJS.Timeout;
@@ -20,7 +25,7 @@ export default class Counter {
   }) {
     const timer = setInterval(() => {
       time -= interval;
-      context.reply(`Timer: ${name}\nTime remaining: ${time}`);
+      context.reply(`Timer: ${name}\nTime remaining: ${readable(time)}`);
     }, interval * 1000);
 
     const killtimer = setTimeout(() => {
@@ -31,11 +36,13 @@ export default class Counter {
 
     context.telegram.sendMessage(
       context.chat!.id,
-      `Timer: ${time}\nInterval: ${interval}\nName: ${name}\nStatus: Running`
+      `Timer: ${readable(
+        time
+      )}\nInterval: ${interval}\nName: ${name}\nStatus: Running`
     );
     this.timer = timer;
     this.killtimer = killtimer;
     this.name = name;
-    this.getTime = () => `Timer ${name} at ${time}`;
+    this.getTime = () => `Timer ${name} at ${readable(time)}`;
   }
 }
