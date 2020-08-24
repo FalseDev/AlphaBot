@@ -5,7 +5,7 @@ const ALLOWED_GROUPS = JSON.parse(process.env.ALLOWED_GROUPS!);
 
 const checkAccess = (context: TelegrafContext) => {
   if (ADMINS.find((admin: number) => context.message?.from?.id === admin))
-    return 2;
+    return 5;
   if (
     ALLOWED_GROUPS.find((group: number) => context.message?.chat.id === group)
   )
