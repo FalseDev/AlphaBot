@@ -1,13 +1,13 @@
 import { GraphQLClient } from "graphql-request";
-import findByIDQuery from "./findByIdGraphql";
+import findByIDQuery from "../graphql/findByIdGraphql";
 
 const processDate = (date: { year: number; month: number; day: number }) =>
   `${date.day}/${date.month}/${date.year}`;
 
-const findByID = async (id: number) => {
+const findByID = async (id: number,idType:"id"|"idMal") => {
   const client = new GraphQLClient("https://graphql.anilist.co");
   const variables = { id };
-  const anime = (await client.request(findByIDQuery, variables)).Media;
+  const anime = (await client.request(findByIDQuery("id"), variables)).Media;
   return `Title: ${anime.title.userPreferred}
 ID: ${anime.id}
 MAL ID: ${anime.idMal}
@@ -15,7 +15,7 @@ Type: ${anime.type}
 Format: ${anime.format}
 Status: ${anime.status}
 
-Description: ${anime.description}
+Description: ${anime.description.replace(/<[^>]*>?/gm, '')}
 
 Start date: ${processDate(anime.startDate)}
 End date: ${processDate(anime.endDate)}

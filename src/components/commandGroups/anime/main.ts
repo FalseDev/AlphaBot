@@ -1,7 +1,7 @@
 import { TelegrafContext } from "telegraf/typings/context";
-import search from "./search";
+import search from "./subcommands/search";
 import checkAccess from "../../common/adminAccess";
-import findByID from "./findByID";
+import findByID from "./subcommands/findByID";
 import * as inputProcessors from "./inputProcessors";
 import animeHelpMessage from "./animeHelpMessage";
 
@@ -18,7 +18,16 @@ const animeCommandRouter = async (context: TelegrafContext) => {
     case "id":
       const id = inputProcessors.processIDFindInput(parts);
       if (!id) return context.reply("Provide an id in the form of a number");
-      return context.reply(await findByID(id));
+      return context.reply(await findByID(id, "id"));
+
+    case "idmal":
+      const idMal = inputProcessors.processIDFindInput(parts);
+      if (!idMal)
+        return context.reply(
+          "Provide a MyAnimeList id in the form of a number"
+        );
+      return context.reply(await findByID(idMal, "idMal"));
+
     default:
       return context.reply(animeHelpMessage);
   }

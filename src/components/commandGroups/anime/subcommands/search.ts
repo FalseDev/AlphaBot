@@ -1,5 +1,5 @@
 import { GraphQLClient } from "graphql-request";
-import searchQuery from "./searchGraphql";
+import searchQuery from "../graphql/searchGraphql";
 
 const search = async ({
   searchTerm,

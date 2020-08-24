@@ -1,8 +1,8 @@
 import { gql } from "graphql-request";
 
-const findByIDQuery = gql`
+const findByIDQuery = (idType: "id" | "idMal") => gql`
   query($id: Int) {
-    Media(id: $id) {
+    Media(${idType}: $id) {
       id
       idMal
       title {
