@@ -2,6 +2,8 @@ import { TelegrafContext } from "telegraf/typings/context";
 import search from "./search";
 import checkAccess from "../../common/adminAccess";
 import findByID from "./findByID";
+import * as inputProcessors from "./inputProcessors";
+import animeHelpMessage from "./animeHelpMessage";
 
 const animeCommandRouter = async (context: TelegrafContext) => {
   if (!checkAccess(context))
@@ -10,42 +12,16 @@ const animeCommandRouter = async (context: TelegrafContext) => {
   const command = parts?.splice(0, 2)[1];
   switch (command) {
     case "search":
-      return context.reply(await search(processSearchInput(parts)));
+      return context.reply(
+        await search(inputProcessors.processSearchInput(parts))
+      );
     case "id":
-      const id = processIDFindInput(parts);
+      const id = inputProcessors.processIDFindInput(parts);
       if (!id) return context.reply("Provide an id in the form of a number");
       return context.reply(await findByID(id));
     default:
-      return context.reply(help());
+      return context.reply(animeHelpMessage);
   }
-};
-
-const help = () => {
-  return "Anime help message coming soon...\n\ud83d\ude09";
-};
-
-const processSearchInput = (parts: string[]) => {
-  let perPage = +parts[parts.length - 2];
-  let page = +parts[parts.length - 1];
-  let control = 2; // Number of parts that don't belong to the search term
-
-  if (Number.isNaN(page)) {
-    control--;
-    page = 1;
-  }
-  if (Number.isNaN(perPage)) {
-    control--;
-    perPage = 5;
-  }
-  const searchTerm = parts.slice(0, parts.length - control).join(" ");
-
-  return { searchTerm, page, perPage };
-};
-
-const processIDFindInput = (parts: string[]) => {
-  const id = +parts[0];
-  if (Number.isNaN(id)) return false;
-  return id;
 };
 
 export default animeCommandRouter;

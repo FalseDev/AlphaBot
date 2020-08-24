@@ -3,6 +3,11 @@ dotenv.config();
 
 import { Telegraf } from "telegraf";
 
+// Import help and start command
+import startMessage from "./components/commands/start"
+import helpMessage from "./components/commands/help"
+import infoMessage from "./components/commands/info"
+
 // Import command sets
 import * as count from "./components/commandGroups/count/main";
 import * as mathFact from "./components/commandGroups/numberFact/main";
@@ -22,7 +27,9 @@ import animeCommandRouter from "./components/commandGroups/anime/main";
 
 const bot = new Telegraf(<string>process.env.BOT_TOKEN);
 
-bot.command("start", (context) => context.reply("Hoi"));
+bot.command("start", startMessage);
+bot.command("help", helpMessage);
+bot.command("info", infoMessage)
 
 // Counting
 bot.command("count", count.add);
