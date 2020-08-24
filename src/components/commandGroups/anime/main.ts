@@ -1,6 +1,7 @@
 import { TelegrafContext } from "telegraf/typings/context";
 import search from "./search";
 import checkAccess from "../../common/adminAccess";
+import findByID from "./findByID";
 
 const animeCommandRouter = async (context: TelegrafContext) => {
   if (!checkAccess(context))
@@ -10,6 +11,10 @@ const animeCommandRouter = async (context: TelegrafContext) => {
   switch (command) {
     case "search":
       return context.reply(await search(processSearchInput(parts)));
+    case "id":
+      const id = processIDFindInput(parts);
+      if (!id) return context.reply("Provide an id in the form of a number");
+      return context.reply(await findByID(id));
     default:
       return context.reply(help());
   }
@@ -35,6 +40,12 @@ const processSearchInput = (parts: string[]) => {
   const searchTerm = parts.slice(0, parts.length - control).join(" ");
 
   return { searchTerm, page, perPage };
+};
+
+const processIDFindInput = (parts: string[]) => {
+  const id = +parts[0];
+  if (Number.isNaN(id)) return false;
+  return id;
 };
 
 export default animeCommandRouter;

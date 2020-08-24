@@ -20,9 +20,7 @@ const search = async ({
 
   // Write all the search results to the message
   data.Page.media.forEach((res: any) => {
-    result += `Title: ${
-      res.title.english ? res.title.english : res.title.userPreferred
-    }\nID: ${res.id}\nMAL ID: ${
+    result += `Title: ${res.title.userPreferred}\nID: ${res.id}\nMAL ID: ${
       res.idMal ? res.idMal : "Not available"
     }\nStatus: ${res.status}\n\n`;
   });

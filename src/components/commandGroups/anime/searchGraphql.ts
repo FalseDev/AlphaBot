@@ -14,7 +14,6 @@ const searchQuery = gql`
         id
         idMal
         title {
-          english
           userPreferred
         }
         status
