@@ -1,22 +1,6 @@
-import axios from "axios";
 import { TelegrafContext } from "telegraf/typings/context";
-
-const getData = async (endpoint: string) => {
-  return await axios({
-    method: "GET",
-    url: `https://numbersapi.p.rapidapi.com/${endpoint}`,
-    headers: {
-      "content-type": "application/octet-stream",
-      "x-rapidapi-host": "numbersapi.p.rapidapi.com",
-      "x-rapidapi-key": process.env.RAPID_API_KEY,
-      useQueryString: true,
-    },
-    params: {
-      fragment: "true",
-      json: "true",
-    },
-  });
-};
+import createAPIRequest from "./createAPIRequest";
+import checkAccess from "../../common/adminAccess";
 
 const getNumberInContext = (context: TelegrafContext) => {
   try {
@@ -46,16 +30,20 @@ const validateDate = (fulldate: string) => {
 };
 
 export const numberFactMath = async (context: TelegrafContext) => {
+  if (!checkAccess(context))
+    return context.reply("Contact the admin to use this bot");
   const number = getNumberInContext(context);
   if (!number) return context.reply("Invalid input");
 
-  const response = await getData(`${number}/math`);
+  const response = await createAPIRequest(`${number}/math`);
   if (!response.data.found)
     return context.reply("Not found for this number :(");
   context.reply(`Number: ${response.data.number}\n${response.data.text}`);
 };
 
 export const dateFact = async (context: TelegrafContext) => {
+  if (!checkAccess(context))
+    return context.reply("Contact the admin to use this bot");
   const date = context.message?.text!.split(" ")[1];
   if (!date)
     return context.reply(
@@ -64,33 +52,39 @@ export const dateFact = async (context: TelegrafContext) => {
   const datePassed = validateDate(date);
   if (typeof datePassed === "string") return context.reply(datePassed);
   if (!datePassed) return context.reply("Invalid input");
-  const response = await getData(`${date}/date`);
+  const response = await createAPIRequest(`${date}/date`);
   if (!response.data.found) return context.reply("Not found for this date :(");
   context.reply(`Year: ${response.data.year}\n${response.data.text}`);
 };
 
 export const randomNumberTrivia = async (context: TelegrafContext) => {
-  const response = await getData("random/trivia");
+  if (!checkAccess(context))
+    return context.reply("Contact the admin to use this bot");
+  const response = await createAPIRequest("random/trivia");
   context.reply(
     `Question: ${response.data.text}\n\nAnswer: ${response.data.number}`
   );
 };
 
 export const yearFact = async (context: TelegrafContext) => {
+  if (!checkAccess(context))
+    return context.reply("Contact the admin to use this bot");
   const year = getNumberInContext(context);
   if (!year) return context.reply("Invalid input");
 
-  const response = await getData(`${year}/year`);
+  const response = await createAPIRequest(`${year}/year`);
   if (!response.data.found)
     return context.reply(`Sorry, nothing found for year ${year}`);
   context.reply(`Year: ${response.data.number}\n${response.data.text}`);
 };
 
 export const numberTriviaFact = async (context: TelegrafContext) => {
+  if (!checkAccess(context))
+    return context.reply("Contact the admin to use this bot");
   const number = getNumberInContext(context);
   if (!number) return context.reply("Invalid input");
 
-  const response = await getData(`${number}/trivia`);
+  const response = await createAPIRequest(`${number}/trivia`);
   if (!response.data.found)
     return context.reply(`Sorry nothing found for number ${number}`);
   context.reply(

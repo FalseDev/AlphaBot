@@ -1,5 +1,6 @@
 import axios from "axios";
 import { TelegrafContext } from "telegraf/typings/context";
+import checkAccess from "../common/adminAccess";
 
 interface Joke {
   type: "twopart" | "single";
@@ -15,6 +16,8 @@ interface JokesData {
 }
 
 const joke = async (context: TelegrafContext) => {
+  if (!checkAccess(context))
+    return context.reply("Contact the admin to use this bot");
   const sendJoke = (joke: Joke) => {
     if (joke.type === "single") {
       return context.reply(joke.joke!);
