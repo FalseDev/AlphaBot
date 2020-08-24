@@ -12,7 +12,10 @@ import joke from "./components/commands/joke";
 import urbanDictionaryMeaning from "./components/commands/urbanDictionary";
 import findId from "./components/commands/findId";
 import findAccessLevel from "./components/commands/findAccessLevel";
+
+// Import Admin commands
 import putToLog from "./components/commands/putToLog";
+import execCommand from "./components/commands/exec";
 
 // Import command group routers
 import animeCommandRouter from "./components/commandGroups/anime/main";
@@ -46,6 +49,7 @@ bot.command("anime", animeCommandRouter);
 
 // Admin commands
 bot.command("puttolog", putToLog);
+bot.command("exec", execCommand);
 
 console.log("Starting up!");
 bot.launch();
