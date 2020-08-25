@@ -16,7 +16,12 @@ const searchQuery = gql`
         title {
           userPreferred
         }
+        type
         status
+        season
+        seasonYear
+        seasonInt
+        episodes
       }
     }
   }
